@@ -186,4 +186,4 @@ Feel free to send us a link to your project or research paper related to word2ve
 
 Disclaimer
 
-This open source project is NOT a Google product, and is released for research purposes only. 
+This open source project is forked from code.google.com/p/word2vec/ for personal use
