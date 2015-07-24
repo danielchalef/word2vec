@@ -34,6 +34,10 @@ struct vocab_word {
   char *word, *code, codelen;
 };
 
+extern float cblas_sdot(const int N, const float *X, const int incX, const float *Y, const int incY);
+//extern void cblas_sgemm(char*, char*, int*, int*,int*, double*, double*, int*, double*, int*, double*, double*, int*);
+extern void cblas_saxpy(const int N, const float alpha, const float *X, const int incX, float *Y, const int incY);
+
 char train_file[MAX_STRING], output_file[MAX_STRING];
 char save_vocab_file[MAX_STRING], read_vocab_file[MAX_STRING];
 struct vocab_word *vocab;
@@ -360,6 +364,10 @@ void InitNet() {
 }
 
 void *TrainModelThread(void *id) {
+  //char ta = 'N';
+  //char tb = 'N';
+  //double alpha = 1.2;
+  //double beta = 1;
   long long a, b, d, cw, word, last_word, sentence_length = 0, sentence_position = 0;
   long long word_count = 0, last_word_count = 0, sen[MAX_SENTENCE_LENGTH + 1];
   long long l1, l2, c, target, label, local_iter = iter;
@@ -434,19 +442,19 @@ void *TrainModelThread(void *id) {
       if (cw) {
         for (c = 0; c < layer1_size; c++) neu1[c] /= cw;
         if (hs) for (d = 0; d < vocab[word].codelen; d++) {
-          f = 0;
           l2 = vocab[word].point[d] * layer1_size;
           // Propagate hidden -> output
-          for (c = 0; c < layer1_size; c++) f += neu1[c] * syn1[c + l2];
+	  f = cblas_sdot(layer1_size, &syn0[l1], 1, &syn1[l2], 1);
+	  //f = cblas_sgemm();
           if (f <= -MAX_EXP) continue;
           else if (f >= MAX_EXP) continue;
           else f = expTable[(int)((f + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))];
           // 'g' is the gradient multiplied by the learning rate
           g = (1 - vocab[word].code[d] - f) * alpha;
           // Propagate errors output -> hidden
-          for (c = 0; c < layer1_size; c++) neu1e[c] += g * syn1[c + l2];
+	  cblas_saxpy(layer1_size, g, &syn1[l2], 1, neu1e, 1);
           // Learn weights hidden -> output
-          for (c = 0; c < layer1_size; c++) syn1[c + l2] += g * neu1[c];
+	  cblas_saxpy(layer1_size, g, &syn0[l1], 1, &syn1[l2], 1);
         }
         // NEGATIVE SAMPLING
         if (negative > 0) for (d = 0; d < negative + 1; d++) {
