@@ -1,6 +1,6 @@
 CC = gcc
 #Using -Ofast instead of -O3 might result in faster code, but is supported only by newer GCC versions
-CFLAGS = -I/opt/OpenBLAS/include/ -lgslcblas -lblas -lm -pthread -O3 -mtune=bdver1 -Wall -funroll-loops -Wno-unused-result -ffast-math -mprefer-avx128 -mvzeroupper
+CFLAGS = -I/opt/OpenBLAS/include/ -lblas -lm -pthread -O3 -mtune=bdver1 -Wall -funroll-loops -Wno-unused-result -ffast-math -mprefer-avx128 -mvzeroupper
 
 all: word2vec word2phrase distance word-analogy compute-accuracy
 
