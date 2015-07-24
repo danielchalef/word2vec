@@ -1,5 +1,9 @@
 Modified to support BLAS. Thanks to [Radim Řehůřek](https://groups.google.com/forum/#!searchin/word2vec-toolkit/blas/word2vec-toolkit/e4X-9iQWmLY/Ser-OlrrXykJ). 
 
+#Installation:
+- Modify the `makefile` for your environment i.e. BLAS library / headers locations, CPU architecture.
+- `make`
+
 Introduction
 
 This tool provides an efficient implementation of the continuous bag-of-words and skip-gram architectures for computing vector representations of words. These representations can be subsequently used in many natural language processing applications and for further research.
