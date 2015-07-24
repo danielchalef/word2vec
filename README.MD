@@ -1,6 +1,6 @@
 Modified to support BLAS. Thanks to [Radim Řehůřek](https://groups.google.com/forum/#!searchin/word2vec-toolkit/blas/word2vec-toolkit/e4X-9iQWmLY/Ser-OlrrXykJ). 
 
-#Installation:
+##Installation:
 - Modify the `makefile` for your environment i.e. BLAS library / headers locations, CPU architecture.
 - `make`
 
